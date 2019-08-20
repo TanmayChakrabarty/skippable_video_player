@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Untitled</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+    </head>
+
+    <body>
+        <div style="margin: 0 auto; width: 700px">
+            <video id="myVideo" style="width: 700px;height: auto;" controls>
+                <source src="Countdown-To-Rocket-Launching.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div id="demo" style="font-weight: bold"></div>
+            The video used here was found royalty free from this link https://www.pexels.com/video/countdown-to-rocket-launching-854269/
+        </div>
+        <script type="text/javascript">
+            function timeStringToSeconds(timeString){
+                var parts = timeString.split(':');
+                var h = parts.length == 3 ? parseInt(parts[0]) : 0;
+                var m = parts.length == 3 ? parseInt(parts[1]) : (parts.length == 2 ? parseInt(parts[0]) : 0);
+                var s = parts.length == 3 ? parseInt(parts[2]) : (parts.length == 2 ? parseInt(parts[1]) : parseInt(parts[0]));
+                m *= 60;
+                h *= 3600;
+                return s + m + h;
+            }
+            var jumpTimes = {
+                '00:00:15' : '00:00:20',
+                '00:00:05' : '00:00:10'
+
+            };
+            var skipTimes = [];
+            for(var i in jumpTimes){
+                var secFrom = timeStringToSeconds(i);
+                var secTo = timeStringToSeconds(jumpTimes[i]);
+                skipTimes[secFrom] = secTo;
+            }
+            console.log(skipTimes);
+            var vid = document.getElementById("myVideo");
+            vid.ontimeupdate = function() {myFunction()};
+            function myFunction() {
+                var curTime = Math.floor(parseFloat(vid.currentTime));
+                if(typeof skipTimes[curTime] !== 'undefined'){
+                    vid.currentTime = skipTimes[curTime];
+                    document.getElementById("demo").innerHTML = "Skipped to <span style='color:red;'>"+skipTimes[curTime]+"</span>";
+                }
+
+            }
+        </script>
+    </body>
+</html>
